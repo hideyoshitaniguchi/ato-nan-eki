@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111827">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="あと何駅">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>あと何駅</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="apple-touch-icon" href="./icon.svg">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel setup-panel" aria-label="乗車設定">
+        <div class="brand-row">
+          <div>
+            <p class="eyebrow">Train Position Prototype</p>
+            <h1>あと何駅</h1>
+          </div>
+          <span id="gpsBadge" class="status-badge">GPS待機</span>
+        </div>
+
+        <div class="field-grid">
+          <label>
+            <span>路線</span>
+            <select id="lineSelect"></select>
+          </label>
+          <label>
+            <span>方面</span>
+            <select id="directionSelect"></select>
+          </label>
+          <label>
+            <span>降車駅</span>
+            <select id="destinationSelect"></select>
+          </label>
+          <label>
+            <span>現在駅の手動補正</span>
+            <select id="manualStationSelect"></select>
+          </label>
+        </div>
+
+        <div class="button-row">
+          <button id="startButton" class="primary-button" type="button">GPSで開始</button>
+          <button id="manualSyncButton" class="secondary-button" type="button">この駅に補正</button>
+        </div>
+      </section>
+
+      <section class="hero-display" aria-live="polite">
+        <div class="route-meta">
+          <span id="routeName">京王線</span>
+          <span id="directionName">新宿方面</span>
+        </div>
+
+        <div id="alertText" class="alert-text">降車駅を選んで開始</div>
+        <div class="count-row">
+          <span>あと</span>
+          <strong id="remainingCount">--</strong>
+          <span>駅</span>
+        </div>
+
+        <dl class="station-readout">
+          <div>
+            <dt>現在推定</dt>
+            <dd id="currentStation">未開始</dd>
+          </div>
+          <div>
+            <dt>次の駅</dt>
+            <dd id="nextStation">--</dd>
+          </div>
+          <div>
+            <dt>降車</dt>
+            <dd id="destinationStation">--</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="panel rail-panel" aria-label="簡易路線図">
+        <div class="rail-header">
+          <div>
+            <p class="eyebrow">Route Map</p>
+            <h2>現在地と降車駅</h2>
+          </div>
+          <div class="step-buttons">
+            <button id="prevButton" class="icon-button" type="button" aria-label="1駅戻す" title="1駅戻す">←</button>
+            <button id="nextButton" class="icon-button" type="button" aria-label="1駅進める" title="1駅進める">→</button>
+          </div>
+        </div>
+        <div id="railMap" class="rail-map"></div>
+      </section>
+
+      <section class="panel detail-panel" aria-label="状態">
+        <div class="detail-grid">
+          <div>
+            <span>推定方法</span>
+            <strong id="sourceText">未開始</strong>
+          </div>
+          <div>
+            <span>GPS精度</span>
+            <strong id="accuracyText">--</strong>
+          </div>
+          <div>
+            <span>次駅まで</span>
+            <strong id="etaText">--</strong>
+          </div>
+          <div>
+            <span>最終更新</span>
+            <strong id="updatedText">--</strong>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
