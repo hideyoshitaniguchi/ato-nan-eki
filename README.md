@@ -2,6 +2,8 @@
 
 京王線と山手線に絞った、電車内向けの現在地推定Webアプリです。
 
+公開URL: https://hideyoshitaniguchi.github.io/ato-nan-eki/
+
 ## 使い方
 
 1. 公開URLをiPhoneのSafariで開く
