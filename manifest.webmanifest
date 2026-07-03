@@ -1,7 +1,7 @@
 {
   "name": "あと何駅",
   "short_name": "あと何駅",
-  "description": "京王線と山手線に絞った電車内向け現在地推定プロトタイプ",
+  "description": "京王線、山手線、小田急線に絞った電車内向け現在地推定プロトタイプ",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
