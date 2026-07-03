@@ -77,6 +77,33 @@
         </dl>
       </section>
 
+      <section class="panel local-panel" aria-label="現在地周辺">
+        <div class="local-header">
+          <div>
+            <p class="eyebrow">Around Here</p>
+            <h2>今いるあたり</h2>
+          </div>
+          <span id="localMode" class="local-mode">未開始</span>
+        </div>
+
+        <div id="localMain" class="local-main">降車駅を選んで開始</div>
+
+        <div class="local-track" aria-label="前後の駅">
+          <div class="local-stop">
+            <span>前</span>
+            <strong id="prevLocalStation">--</strong>
+          </div>
+          <div class="local-stop current">
+            <span>今ここ</span>
+            <strong id="currentLocalStation">未開始</strong>
+          </div>
+          <div class="local-stop">
+            <span>次</span>
+            <strong id="nextLocalStation">--</strong>
+          </div>
+        </div>
+      </section>
+
       <section class="panel rail-panel" aria-label="簡易路線図">
         <div class="rail-header">
           <div>

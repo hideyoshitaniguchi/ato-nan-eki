@@ -157,6 +157,11 @@ const dom = {
   currentStation: document.querySelector("#currentStation"),
   nextStation: document.querySelector("#nextStation"),
   destinationStation: document.querySelector("#destinationStation"),
+  localMode: document.querySelector("#localMode"),
+  localMain: document.querySelector("#localMain"),
+  prevLocalStation: document.querySelector("#prevLocalStation"),
+  currentLocalStation: document.querySelector("#currentLocalStation"),
+  nextLocalStation: document.querySelector("#nextLocalStation"),
   railMap: document.querySelector("#railMap"),
   sourceText: document.querySelector("#sourceText"),
   accuracyText: document.querySelector("#accuracyText"),
@@ -444,6 +449,7 @@ function render() {
   dom.accuracyText.textContent = state.accuracy === null ? "--" : `±${state.accuracy}m`;
   dom.etaText.textContent = getEtaText(current);
   dom.updatedText.textContent = state.updatedAt ? state.updatedAt.toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "--";
+  renderLocalView(stations, current, next, remaining);
 
   if (remaining === 0 && current?.id === destination?.id) {
     dom.alertText.textContent = "到着";
@@ -460,6 +466,27 @@ function render() {
   }
 
   renderRailMap(stations, destinationIndex);
+}
+
+function renderLocalView(stations, current, next, remaining) {
+  const currentIndex = state.currentIndex ?? -1;
+  const previous = currentIndex > 0 ? stations[currentIndex - 1] : null;
+  const currentLabel = getCurrentLabel(current, next);
+
+  dom.localMode.textContent = state.source;
+  dom.localMain.textContent = getLocalMainText(current, next, remaining);
+  dom.prevLocalStation.textContent = previous?.name || "始発側";
+  dom.currentLocalStation.textContent = currentLabel;
+  dom.nextLocalStation.textContent = next?.name || "終点";
+}
+
+function getLocalMainText(current, next, remaining) {
+  if (!current) return "降車駅を選んで開始";
+  if (remaining === 0) return `${current.name}に到着`;
+  if (remaining === 1 && next) return `次は${next.name}、そこで降車`;
+  if (state.moving && next) return `${current.name}から${next.name}のあたり`;
+  if (next) return `次は${next.name}`;
+  return `${current.name}付近`;
 }
 
 function getCurrentLabel(current, next) {
