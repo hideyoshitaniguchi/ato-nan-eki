@@ -174,7 +174,9 @@ const state = {
   accuracy: null,
   watchId: null,
   updatedAt: null,
-  moving: false
+  moving: false,
+  railRenderKey: null,
+  railScrollKey: null
 };
 
 function s(id, name, lat, lon, secondsToNext) {
@@ -477,24 +479,51 @@ function getEtaText(current) {
 }
 
 function renderRailMap(stations, destinationIndex) {
-  dom.railMap.innerHTML = "";
   const currentIndex = state.currentIndex ?? -1;
+  const renderKey = `${state.lineId}:${state.directionId}:${currentIndex}:${destinationIndex}`;
 
-  stations.forEach((station, index) => {
-    const stop = document.createElement("div");
-    stop.className = "rail-stop";
-    if (index < currentIndex) stop.classList.add("passed");
-    if (index === currentIndex) stop.classList.add("current");
-    if (index === destinationIndex) stop.classList.add("destination");
-    if (Math.abs(index - currentIndex) <= 1 || Math.abs(index - destinationIndex) <= 1) stop.classList.add("neighbor");
+  if (state.railRenderKey !== renderKey) {
+    dom.railMap.innerHTML = "";
+    state.railRenderKey = renderKey;
 
-    const dot = document.createElement("span");
-    dot.className = "dot";
-    const name = document.createElement("span");
-    name.className = "stop-name";
-    name.textContent = station.name;
-    stop.append(dot, name);
-    dom.railMap.append(stop);
+    stations.forEach((station, index) => {
+      const stop = document.createElement("div");
+      stop.className = "rail-stop";
+      stop.dataset.index = String(index);
+      if (index < currentIndex) stop.classList.add("passed");
+      if (index === currentIndex) stop.classList.add("current");
+      if (index === destinationIndex) stop.classList.add("destination");
+      if (Math.abs(index - currentIndex) <= 1 || Math.abs(index - destinationIndex) <= 1) stop.classList.add("neighbor");
+
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      const name = document.createElement("span");
+      name.className = "stop-name";
+      name.textContent = station.name;
+      stop.append(dot, name);
+      dom.railMap.append(stop);
+    });
+  }
+
+  autoScrollRailMap(currentIndex, destinationIndex);
+}
+
+function autoScrollRailMap(currentIndex, destinationIndex) {
+  if (currentIndex < 0) return;
+
+  const scrollKey = `${state.lineId}:${state.directionId}:${currentIndex}:${destinationIndex}`;
+  if (state.railScrollKey === scrollKey) return;
+  state.railScrollKey = scrollKey;
+
+  requestAnimationFrame(() => {
+    const currentStop = dom.railMap.querySelector(".rail-stop.current");
+    if (!currentStop) return;
+
+    const targetLeft = currentStop.offsetLeft + currentStop.offsetWidth / 2 - dom.railMap.clientWidth / 2;
+    dom.railMap.scrollTo({
+      left: Math.max(0, targetLeft),
+      behavior: "smooth"
+    });
   });
 }
 
